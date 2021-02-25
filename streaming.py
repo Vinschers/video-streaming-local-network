@@ -32,7 +32,7 @@ HTML = """
     <body>
         <div id='container' style='width:100%; height:100%;'>
             <video id="video" src="$URL"
-                width="400" height="220" poster=""
+                width="1280" height="720" poster=""
                 preload="auto" controls loop>
             </video>
             <div id='status'></div>
@@ -47,11 +47,7 @@ HTML = """
                 workerUrl: '/static/subtitles-octopus-worker.js', // Link to WebAssembly-based file "libassjs-worker.js"
                 legacyWorkerUrl: '/static/subtitles-octopus-worker-legacy.js' // Link to non-WebAssembly worker
             };
-            console.log('oi')
-            div.innerText += 'ola';
             var ass = new SubtitlesOctopus(options);
-            div.innerText += 'ola2';
-            console.log(ass)
         </script>
     </body>
 </html>
@@ -95,6 +91,8 @@ app = Flask(__name__)
 @app.after_request
 def after_request_func(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
+    if '.wasm' in request.url:
+        response.headers['Content-Type'] = 'application/wasm'
     return response
 
 
